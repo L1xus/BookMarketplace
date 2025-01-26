@@ -7,13 +7,15 @@ services:
     volumes:
       - .:/app
     command: python main.py
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:14.0
     environment:
       POSTGRE_USER: astro
       POSTGRE_PASSWORD: astro
-      POSTGRE_DB: astro
+      POSTGRE_DB: books_marketplace
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
@@ -22,3 +24,6 @@ services:
       retries: 5
       start_period: 5s
     restart: always
+
+volumes:
+  postgres-db-volume:
