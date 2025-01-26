@@ -1,0 +1,24 @@
+version: "3"
+services:
+  marketplace:
+    build: .
+    ports:
+      - "4000:80"
+    volumes:
+      - .:/app
+    command: python main.py
+
+  postgres:
+    image: postgres:14.0
+    environment:
+      POSTGRE_USER: astro
+      POSTGRE_PASSWORD: astro
+      POSTGRE_DB: astro
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "astro"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
