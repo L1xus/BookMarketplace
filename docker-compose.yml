@@ -6,18 +6,22 @@ services:
       - "4000:80"
     volumes:
       - .:/app
-    command: python main.py
+    networks:
+      - books-net
     depends_on:
       - postgres
+    command: python main.py
 
   postgres:
     image: postgres:14.0
     environment:
-      POSTGRE_USER: astro
-      POSTGRE_PASSWORD: astro
-      POSTGRE_DB: books_marketplace
+      POSTGRES_USER: astro
+      POSTGRES_PASSWORD: astro
+      POSTGRES_DB: books_marketplace
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+    networks:
+      - books-net
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "astro"]
       interval: 10s
@@ -27,3 +31,6 @@ services:
 
 volumes:
   postgres-db-volume:
+
+networks:
+  books-net:

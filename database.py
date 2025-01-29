@@ -6,4 +6,6 @@ POSTGRES_HOST = "postgres"
 POSTGRES_PORT = 5432
 POSTGRES_DB = "books_marketplace"
 
-engine = create_engine(f"postgresql://{POSTGRES_USER}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
+postgres_url = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+
+engine = create_engine(postgres_url, echo=True)

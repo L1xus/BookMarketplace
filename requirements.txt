@@ -1,3 +1,5 @@
 python-dotenv
-"fastapi[standard]"
+fastapi
+uvicorn
 sqlmodel
+psycopg2-binary
