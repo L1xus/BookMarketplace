@@ -1,5 +1,5 @@
-from typing import Optional
-from sqlmodel import Field, SQLModel
+from typing import Optional, List
+from sqlmodel import Relationship, Field, SQLModel
 from sqlalchemy import UniqueConstraint
 
 class Book(SQLModel, table=True):
@@ -8,7 +8,7 @@ class Book(SQLModel, table=True):
     price: float
     author: str
     pages: Optional[int] = None
-
+    orders: List["Order"] = Relationship(back_populates="book")
 
 class Order(SQLModel, table=True):
     __table_args__ = (UniqueConstraint("customer_contact"),)
@@ -17,3 +17,4 @@ class Order(SQLModel, table=True):
     customer_name: str
     customer_contact: str
     status: str = Field(default="pending")
+    book: Optional[Book] = Relationship(back_populates="orders")

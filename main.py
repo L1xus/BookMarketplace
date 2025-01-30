@@ -49,3 +49,10 @@ if __name__ == "__main__":
 # }'
 #
 # curl -X 'GET' 'http://localhost:4000/books/'
+#
+# curl -X 'POST' 'http://localhost:4000/orders/' -H 'Content-Type: application/json' -d '{
+#   "book_id": 1,
+#   "customer_name": "Astro",
+#   "customer_contact": "astro@astro.com",
+#   "status": "pending"
+# }'
