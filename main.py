@@ -11,10 +11,14 @@ from crud import (
     place_orders_in_db,
     get_orders_from_db,
 )
-from models import Book, Order, AiAction
+from models import Book, ChatRequest, Order, AiAction
+from dotenv import load_dotenv
 from openai import OpenAI
 
+load_dotenv()
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+print(f"Heck: {OPENAI_API_KEY}")
 
 client = instructor.from_openai(OpenAI(api_key=OPENAI_API_KEY))
 
@@ -51,7 +55,9 @@ def get_orders():
     return get_orders_from_db()
 
 @app.post("/chat/")
-def chat_with_data(prompt: str):
+def chat_with_data(req: ChatRequest):
+    prompt = req.prompt
+
     res = client.chat.completions.create(
         model = "gpt-4o-mini",
         response_model = AiAction,

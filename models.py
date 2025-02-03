@@ -20,6 +20,9 @@ class Order(SQLModel, table=True):
     status: str = Field(default="pending")
     book: Optional[Book] = Relationship(back_populates="orders")
 
+class ChatRequest(BaseModel):
+    prompt: str
+
 class AiAction(BaseModel):
     action: str
     books: Optional[List[dict]] = None
