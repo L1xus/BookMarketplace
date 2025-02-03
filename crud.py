@@ -3,22 +3,28 @@ from models import Book, Order
 from database import engine
 
 
-def add_book_to_db(book: Book):
+def add_books_to_db(books):
+    if not isinstance(books, list):
+        books = [books]
+
     with Session(engine) as session:
-        session.add(book)
+        session.add_all(books)
         session.commit()
-    return book
+    return books
 
 def get_books_from_db():
     with Session(engine) as session:
         books = session.query(Book).all()
     return books
 
-def place_order_in_db(order: Order):
+def place_orders_in_db(orders):
+    if not isinstance(orders, list):
+        orders = [orders]
+
     with Session(engine) as session:
-        session.add(order)
+        session.add_all(orders)
         session.commit()
-    return order
+    return orders
 
 def get_orders_from_db():
     with Session(engine) as session:
