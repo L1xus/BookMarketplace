@@ -3,7 +3,6 @@ from typing import Optional, List
 from sqlmodel import Relationship, Field, SQLModel
 from sqlalchemy import UniqueConstraint
 
-
 class Book(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str
@@ -11,7 +10,6 @@ class Book(SQLModel, table=True):
     author: str
     pages: Optional[int] = None
     orders: List["Order"] = Relationship(back_populates="book")
-
 
 class Order(SQLModel, table=True):
     __table_args__ = (UniqueConstraint("customer_contact"),)
@@ -21,7 +19,6 @@ class Order(SQLModel, table=True):
     customer_contact: str
     status: str = Field(default="pending")
     book: Optional[Book] = Relationship(back_populates="orders")
-
 
 class AiAction(BaseModel):
     action: str
