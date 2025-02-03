@@ -1,4 +1,7 @@
+import os
+import time
 import uvicorn
+import instructor
 from fastapi import FastAPI, HTTPException
 from sqlmodel import SQLModel, Session
 from database import engine
@@ -8,8 +11,12 @@ from crud import (
     place_orders_in_db,
     get_orders_from_db,
 )
-from models import Book, Order
+from models import Book, Order, AiAction
+from openai import OpenAI
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+client = instructor.from_openai(OpenAI(api_key=OPENAI_API_KEY))
 
 app = FastAPI()
 
@@ -43,8 +50,26 @@ def place_orders(orders: list[Order] | Order):
 def get_orders():
     return get_orders_from_db()
 
+@app.post("/chat/")
+def chat_with_data(prompt: str):
+    res = client.chat.completions.create(
+        model = "gpt-4o-mini",
+        response_model = AiAction,
+        messages = [{"role": "user", "content": prompt}]
+    )
+
+    action = res.action.lower()
+
+    if action == "add_book" and res.books:
+        return add_books(res.books)
+    elif action == "place_order" and res.orders:
+        return place_orders(res.orders)
+    else:
+        raise HTTPException(status_code=400, detail="Unknown action!")
+
 
 if __name__ == "__main__":
+    time.sleep(2)
     SQLModel.metadata.create_all(engine)
     uvicorn.run(app, host="0.0.0.0", port=80)
 

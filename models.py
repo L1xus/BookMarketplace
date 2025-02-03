@@ -9,7 +9,7 @@ class Book(SQLModel, table=True):
     price: float
     author: str
     pages: Optional[int] = None
-    orders: List["Order"] = Relationship(back_populates="book")
+    orders: Optional[List["Order"]] = Relationship(back_populates="book")
 
 class Order(SQLModel, table=True):
     __table_args__ = (UniqueConstraint("customer_contact"),)
