@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
+from typing_extensions import Literal
 from sqlmodel import Relationship, Field, SQLModel
 from sqlalchemy import UniqueConstraint
 
@@ -24,6 +25,6 @@ class ChatRequest(BaseModel):
     prompt: str
 
 class AiAction(BaseModel):
-    action: str
-    books: Optional[List[dict]] = None
-    orders: Optional[List[dict]] = None
+    action: Literal["add_book", "place_order"]
+    books: Optional[List[Book]] = None
+    orders: Optional[List[Order]] = None
