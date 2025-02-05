@@ -15,6 +15,7 @@ from crud import (
 from models import Book, ChatRequest, Order, AiAction
 from dotenv import load_dotenv
 from groq import Groq
+import client
 
 load_dotenv()
 
@@ -23,6 +24,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 client = instructor.from_groq(Groq(api_key=GROQ_API_KEY))
 
 app = FastAPI()
+app.include_router(client.router)
 
 @app.post("/books/", response_model=list[Book])
 def add_books(books: list[Book] | Book):
