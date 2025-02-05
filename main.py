@@ -13,12 +13,10 @@ from crud import (
 )
 from models import Book, ChatRequest, Order, AiAction
 from dotenv import load_dotenv
-# from openai import OpenAI
 from groq import Groq
 
 load_dotenv()
 
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 client = instructor.from_groq(Groq(api_key=GROQ_API_KEY))
@@ -117,4 +115,8 @@ if __name__ == "__main__":
 #   "customer_name": "Astro",
 #   "customer_contact": "astro@astro.com",
 #   "status": "pending"
+# }'
+#
+# curl -X 'POST' 'http://localhost:4000/chat/' -H 'Content-Type: application/json' -d '{
+#   "prompt": "create 3 random orders"
 # }'
