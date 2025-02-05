@@ -110,23 +110,3 @@ if __name__ == "__main__":
     time.sleep(2)
     SQLModel.metadata.create_all(engine)
     uvicorn.run(app, host="0.0.0.0", port=80)
-
-
-# curl -X 'POST' 'http://localhost:4000/books/' -H 'Content-Type: application/json' -d '{
-#   "title": "HappyLooop",
-#   "price": 500,
-#   "author": "0m@r"
-# }'
-#
-# curl -X 'GET' 'http://localhost:4000/books/'
-#
-# curl -X 'POST' 'http://localhost:4000/orders/' -H 'Content-Type: application/json' -d '{
-#   "book_id": 1,
-#   "customer_name": "Astro",
-#   "customer_contact": "astro@astro.com",
-#   "status": "pending"
-# }'
-#
-# curl -X 'POST' 'http://localhost:4000/chat/' -H 'Content-Type: application/json' -d '{
-#   "prompt": "create 3 random orders"
-# }'
