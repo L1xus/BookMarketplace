@@ -8,6 +8,7 @@ from database import engine
 from crud import (
     add_books_to_db,
     get_books_from_db,
+    get_insights_from_db,
     place_orders_in_db,
     get_orders_from_db,
 )
@@ -64,9 +65,9 @@ def chat_with_data(req: ChatRequest):
             {
                 "role": "system",
                 "content": (
-                    "You are an AI assistant that processes book orders.\n"
+                    "You are an AI assistant that processes book orders and fetch insights from the database.\n"
                     "You must always return structured JSON data following the AiAction schema.\n"
-                    "Your action must always be 'add_book' or 'place_order'.\n\n"
+                    "Your action must always be 'add_books' or 'place_orders' or 'get_insights'.\n\n"
                     "When generating books, follow this structure:\n"
                     "- title: str (required)\n"
                     "- price: float (required)\n"
@@ -78,7 +79,8 @@ def chat_with_data(req: ChatRequest):
                     "- customer_contact: str (required)\n"
                     "- status: str (default='pending')\n\n"
                     "If the user wants to add books, generate books under 'books'.\n"
-                    "If the user wants to place an order, generate orders under 'orders'."
+                    "If the user wants to place an order, generate orders under 'orders'.\n"
+                    "If the user wants insights, return an SQL query under 'sql_query'."
                 ),
             },
             {"role": "user", "content": prompt},
@@ -89,10 +91,16 @@ def chat_with_data(req: ChatRequest):
     action = res.action.lower()
     print(f"HERE IS THE ACTION: {action}")
 
-    if action == "add_book" and res.books:
-        return add_books(res.books)
-    elif action == "place_order" and res.orders:
-        return place_orders(res.orders)
+    if action == "add_books" and res.books:
+        return add_books_to_db(res.books)
+    elif action == "place_orders" and res.orders:
+        return place_orders_in_db(res.orders)
+    elif action == "get_insights" and res.sql_query:
+        try:
+            result = get_insights_from_db(res.sql_query)
+            return {"query": res.sql_query, "result": result}
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Query failed: {str(e)}")
     else:
         raise HTTPException(status_code=400, detail="Unknown action!")
 

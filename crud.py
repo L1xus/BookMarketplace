@@ -1,4 +1,5 @@
 from sqlmodel import Session
+from sqlalchemy import text
 from models import Book, Order
 from database import engine
 
@@ -30,3 +31,9 @@ def get_orders_from_db():
     with Session(engine) as session:
         orders = session.query(Order).all()
     return orders
+
+def get_insights_from_db(query: str):
+    with Session(engine) as session:
+        insight_query = session.execute(text(query))
+        result = insight_query.fetchall()
+    return result
