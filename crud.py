@@ -35,5 +35,5 @@ def get_orders_from_db():
 def get_insights_from_db(query: str):
     with Session(engine) as session:
         insight_query = session.execute(text(query))
-        result = insight_query.fetchall()
+        result = insight_query.mappings().all()
     return result
